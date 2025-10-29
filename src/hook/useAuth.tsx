@@ -1,13 +1,14 @@
-import React, { 
-  createContext, 
-  useContext, 
-  useState, 
-  ReactNode, 
-  useEffect 
-} from 'react';
-import { LoginResponse, UserDto } from '../model/auth_model';
-import { axiosClient } from '../api/axios_client';
-import { logoutService, refreshToken } from '../service/auth_service';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { LoginResponse, UserDto } from "../model/auth_model";
+import { axiosClient } from "../api/axios_client";
+import { logoutService, refreshToken } from "../service/auth_service";
+import { setupAxiosInterceptors } from "../api/setup_axios";
 
 interface AuthContextType {
   user: UserDto | null;
@@ -26,12 +27,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (data: LoginResponse) => {
     setAccessToken(data.accessToken);
-    setUser(data.user);              
-    localStorage.setItem('refreshToken', data.refreshToken);
+    setUser(data.user);
+    localStorage.setItem("refreshToken", data.refreshToken);
   };
 
   const logout = async () => {
-    const storedRefreshToken = localStorage.getItem('refreshToken');
+    const storedRefreshToken = localStorage.getItem("refreshToken");
     if (storedRefreshToken) {
       try {
         await logoutService(storedRefreshToken);
@@ -41,60 +42,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     setAccessToken(null);
     setUser(null);
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem("refreshToken");
   };
 
   useEffect(() => {
-    const requestInterceptor = axiosClient.interceptors.request.use(
-      (config) => {
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
+    // Thiết lập axios interceptor ngay từ đầu
+    setupAxiosInterceptors(() => accessToken, logout, refreshToken, login);
 
-    const responseInterceptor = axiosClient.interceptors.response.use(
-      (response) => response, 
-
-      async (error) => {
-        const originalRequest = error.config;
-        
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-          
-          const storedRefreshToken = localStorage.getItem('refreshToken');
-          if (!storedRefreshToken) {
-            logout();
-            return Promise.reject(error);
-          }
-
-          try {
-            const response = await refreshToken(storedRefreshToken);           
-            login(response); 
-            originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
-            return axiosClient(originalRequest); 
-            
-          } catch (refreshError) {
-            logout(); 
-            return Promise.reject(refreshError);
-          }
-        }
-        
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-      axiosClient.interceptors.request.eject(requestInterceptor);
-      axiosClient.interceptors.response.eject(responseInterceptor);
-    };
-  }, [accessToken]); 
-
-  useEffect(() => {
     const tryRefreshToken = async () => {
-      const storedRefreshToken = localStorage.getItem('refreshToken');
+      const storedRefreshToken = localStorage.getItem("refreshToken");
       if (!storedRefreshToken) {
         setIsLoading(false);
         return;
@@ -102,10 +58,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         const response = await refreshToken(storedRefreshToken);
-        login(response); 
+        login(response);
       } catch (error) {
-        console.error('LỖI KHI REFRESH TOKEN LÚC TẢI TRANG:', error);
-        console.error('Failed to refresh token on load', error);
+        console.error("Lỗi khi refresh token lúc tải trang:", error);
         logout();
       } finally {
         setIsLoading(false);
@@ -116,11 +71,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading session...</div>; 
+    return <div>Loading session...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ user, accessToken, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, accessToken, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -130,7 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

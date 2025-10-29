@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
     };
 
     fetchData();
-  }, []); // Mảng rỗng đảm bảo useEffect chỉ chạy 1 lần khi mount
+  }, []);
 
   const statCardsDisplayData: StatCardProps[] = stats
     ? [
@@ -115,7 +115,6 @@ const Dashboard: React.FC = () => {
       ]
     : [];
 
-  // --- Render Trạng thái Loading ---
   if (loading) {
     return (
       <Box
@@ -123,7 +122,7 @@ const Dashboard: React.FC = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh", // Chiều cao toàn màn hình
+          height: "100vh",
           backgroundColor: "#f0f2f5",
         }}
       >
@@ -135,7 +134,6 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  // --- Render Trạng thái Error ---
   if (error) {
     return (
       <Box

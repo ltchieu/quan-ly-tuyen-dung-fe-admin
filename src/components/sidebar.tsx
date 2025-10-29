@@ -45,13 +45,6 @@ const Sidebar = (props: Props) => {
     alignItems: "center",
   };
 
-  const columnContainerProps: BoxProps = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
-
   return (
     <Box
       component="aside"
@@ -61,7 +54,8 @@ const Sidebar = (props: Props) => {
         backgroundColor: "#fffffff8",
         borderRadius: "1rem",
         zIndex: "990",
-        height: "90%"
+        height: "90%",
+        boxShadow: "0 0 5px 5x #ffffff6e"
       }}
     >
       <Box sx={{ padding: "10px", width: "256px" }}>
