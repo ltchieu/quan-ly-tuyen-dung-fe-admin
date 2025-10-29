@@ -104,6 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const response = await refreshToken(storedRefreshToken);
         login(response); 
       } catch (error) {
+        console.error('LỖI KHI REFRESH TOKEN LÚC TẢI TRANG:', error);
         console.error('Failed to refresh token on load', error);
         logout();
       } finally {

@@ -58,9 +58,10 @@ const Sidebar = (props: Props) => {
       sx={{
         position: "fixed",
         margin: "1rem 0 1rem 1.5rem",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#fffffff8",
         borderRadius: "1rem",
         zIndex: "990",
+        height: "90%"
       }}
     >
       <Box sx={{ padding: "10px", width: "256px" }}>
@@ -70,7 +71,7 @@ const Sidebar = (props: Props) => {
             <Typography
               variant="h6"
               component="a"
-              href="#"
+              href="/"
               sx={{
                 fontWeight: "bold",
                 color: "#344767",

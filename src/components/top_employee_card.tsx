@@ -7,7 +7,7 @@ interface TopEmployersCardProps {
 }
 const TopEmployersCard: React.FC<TopEmployersCardProps> = ({ data }) => (
   <Card component={Paper} elevation={3}>
-    <CardContent>
+    <CardContent sx={{textAlign: "center"}}>
       <Typography variant="h6" gutterBottom>
         CÁC NHÀ TUYỂN DỤNG HÀNG ĐẦU
       </Typography>

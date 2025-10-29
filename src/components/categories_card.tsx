@@ -18,9 +18,9 @@ const CategoriesCard: React.FC<CategoriesCardProps> = ({ data }) => {
   };
 
   return (
-    <Card component={Paper} elevation={3}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
+    <Card component={Paper} elevation={3} sx={{ height: '100%' }}>
+      <CardContent >
+        <Typography sx={{textAlign: "center", fontWeight: "bold"}} variant="h6" gutterBottom>
           DUYỆT NỘI DUNG
         </Typography>
       </CardContent>
