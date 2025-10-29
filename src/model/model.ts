@@ -26,7 +26,6 @@ export type TopEmployersResponse = TopEmployer[];
 // 4. Dữ liệu cho danh sách "Duyệt nội dung"
 export interface ModerationCategory {
   id: string;
-  // API nên trả về một 'type' để chúng ta map với icon
   type: 'pending_jobs' | 'reported_profiles' | 'support_tickets' | 'new_reviews';
   primary: string;
   secondary: string;

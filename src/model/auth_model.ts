@@ -14,3 +14,7 @@ export interface LoginResponse {
   refreshToken: string;
   user: UserDto;
 }
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}

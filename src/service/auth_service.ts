@@ -1,9 +1,13 @@
 import axios from "axios";
 import { axiosClient } from "../api/axios_client";
 import { ApiResponse } from "../model/api_respone";
-import { LoginRequest, LoginResponse } from "../model/auth_model";
+import {
+  LoginRequest,
+  LoginResponse,
+  RefreshTokenRequest,
+} from "../model/auth_model";
 
-export async function login(credentials: LoginRequest): Promise<LoginResponse> {
+export async function loginService(credentials: LoginRequest): Promise<LoginResponse> {
   try {
     const response = await axiosClient.post<ApiResponse<LoginResponse>>(
       "/auth/login",
@@ -26,3 +30,33 @@ export async function login(credentials: LoginRequest): Promise<LoginResponse> {
     }
   }
 }
+
+export async function refreshToken(token: string): Promise<LoginResponse> {
+  try {
+    const response = await axiosClient.post<ApiResponse<LoginResponse>>(
+      "/auth/refresh",
+      { refreshToken: token } as RefreshTokenRequest
+    );
+    if (response.data && response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || "Refresh token thất bại");
+    }
+  } catch (error: any) {
+    const message = error.response?.data?.message || error.message;
+    throw new Error(message);
+  }
+}
+
+export async function logoutService (token: string): Promise<boolean> {
+    try {
+      const response = await axiosClient.post<ApiResponse<boolean>>(
+        '/auth/logout',
+        { refreshToken: token } as RefreshTokenRequest
+      );
+      return response.data.data;
+    } catch (error: any) {
+      console.error("Lỗi khi đăng xuất:", error);
+      return false; 
+    }
+  }

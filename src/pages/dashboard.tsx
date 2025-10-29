@@ -12,15 +12,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
   Container,
   Paper,
-  Divider,
-  CircularProgress, // Thêm component loading
+  CircularProgress,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,12 +22,6 @@ import {
   faUserPlus,
   faBuilding,
   faBriefcase,
-  faFileLines,
-  faTriangleExclamation,
-  faHeadset,
-  faStar,
-  faChevronRight,
-  faQuestionCircle, // Icon dự phòng
 } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -43,8 +31,9 @@ import {
   TopEmployer,
 } from "../model/model";
 import { dashboardService } from "../service/dashboard_service";
+import CategoriesCard from "../components/categories_card";
+import TopEmployersCard from "../components/top_employee_card";
 
-// --- Types cho Props của Component Con ---
 interface StatCardProps {
   title: string;
   value: string;
@@ -58,15 +47,7 @@ interface ApplicationsChartCardProps {
   data: ApplicationChartDatapoint[];
 }
 
-interface TopEmployersCardProps {
-  data: TopEmployer[];
-}
 
-interface CategoriesCardProps {
-  data: ModerationCategory[];
-}
-
-// Component Thẻ Thống Kê
 const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
@@ -97,7 +78,6 @@ const StatCard: React.FC<StatCardProps> = ({
   </Card>
 );
 
-// Component Biểu Đồ
 const ApplicationsChartCard: React.FC<ApplicationsChartCardProps> = ({
   data,
 }) => (
@@ -130,7 +110,6 @@ const ApplicationsChartCard: React.FC<ApplicationsChartCardProps> = ({
   </Card>
 );
 
-// Component Thẻ Chào Mừng (Không đổi)
 const WelcomeCard: React.FC = () => {
   const imageUrl = "https://source.unsplash.com/random/800x600?abstract&wave";
   return (
@@ -166,90 +145,7 @@ const WelcomeCard: React.FC = () => {
   );
 };
 
-// Component Bảng Nhà Tuyển Dụng (Cập nhật để nhận 'data')
-const TopEmployersCard: React.FC<TopEmployersCardProps> = ({ data }) => (
-  <Card component={Paper} elevation={3}>
-    <CardContent>
-      <Typography variant="h6" gutterBottom>
-        CÁC NHÀ TUYỂN DỤNG HÀNG ĐẦU
-      </Typography>
-    </CardContent>
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>CÔNG TY</TableCell>
-            <TableCell align="right">SỐ TIN ĐĂNG</TableCell>
-            <TableCell align="right">TỔNG CHI TIÊU</TableCell>
-            <TableCell align="right">LƯỢT XEM TIN</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.jobs}</TableCell>
-              <TableCell align="right">{row.spend}</TableCell>
-              <TableCell align="right">{row.views}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </Card>
-);
-
-// Component Danh Sách Duyệt Nội Dung (Cập nhật để nhận 'data' và map icon)
-const CategoriesCard: React.FC<CategoriesCardProps> = ({ data }) => {
-  // Map 'type' từ API với icon cụ thể
-  const iconMap: { [key: string]: IconDefinition } = {
-    pending_jobs: faFileLines,
-    reported_profiles: faTriangleExclamation,
-    support_tickets: faHeadset,
-    new_reviews: faStar,
-    default: faQuestionCircle, // Icon dự phòng
-  };
-
-  return (
-    <Card component={Paper} elevation={3}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          DUYỆT NỘI DUNG
-        </Typography>
-      </CardContent>
-      <List sx={{ p: 0 }}>
-        {data.map((item, index) => (
-          <React.Fragment key={item.id}>
-            {index > 0 && <Divider variant="middle" component="li" />}
-            <ListItem
-              secondaryAction={
-                <IconButton edge="end" aria-label="details">
-                  <FontAwesomeIcon icon={faChevronRight} size="xs" />
-                </IconButton>
-              }
-            >
-              <ListItemIcon sx={{ minWidth: 40 }}>
-                <Avatar sx={{ width: 34, height: 34 }}>
-                  <FontAwesomeIcon
-                    icon={iconMap[item.type] || iconMap.default}
-                    size="sm"
-                  />
-                </Avatar>
-              </ListItemIcon>
-              <ListItemText primary={item.primary} secondary={item.secondary} />
-            </ListItem>
-          </React.Fragment>
-        ))}
-      </List>
-    </Card>
-  );
-};
-
-// --- Component Dashboard Chính (Cập nhật logic fetch data) ---
 const Dashboard: React.FC = () => {
-  // --- State cho dữ liệu ---
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [chartData, setChartData] = useState<ApplicationChartDatapoint[]>([]);
   const [topEmployers, setTopEmployers] = useState<TopEmployer[]>([]);
@@ -257,11 +153,9 @@ const Dashboard: React.FC = () => {
     []
   );
 
-  // --- State cho loading và error ---
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // --- useEffect để fetch data khi component mount ---
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -296,38 +190,38 @@ const Dashboard: React.FC = () => {
     ? [
         {
           title: "DOANH THU HÔM NAY",
-          value: stats.revenueToday.value,
-          change: stats.revenueToday.change,
+          value: String(stats.revenueToday.value),
+          change: stats.revenueToday.change, 
           changeColor: "success.main",
           icon: faMoneyBillWave,
           iconBgColor: "primary.main",
         },
         {
-          title: "ỨNG VIÊN MỚI (HÔM NAY)",
-          value: stats.newCandidates.value.toLocaleString("vi-VN"),
-          change: stats.newCandidates.change,
+          title: "ỨNG VIÊN MỚI (TUẦN NÀY)",
+          value: String(stats.newCandidates.value), 
+          change: stats.newCandidates.change, 
           changeColor: "success.main",
           icon: faUserPlus,
           iconBgColor: "error.main",
         },
         {
-          title: "NHÀ TUYỂN DỤNG MỚI",
-          value: `+${stats.newEmployers.value.toLocaleString("vi-VN")}`,
-          change: stats.newEmployers.change,
+          title: "NHÀ TUYỂN DỤNG MỚI (QUÝ NÀY)",
+          value: String(stats.newEmployers.value), 
+          change: stats.newEmployers.change, 
           changeColor: "success.main",
           icon: faBuilding,
           iconBgColor: "success.main",
         },
         {
-          title: "VIỆC LÀM MỚI (HÔM NAY)",
-          value: stats.newJobs.value.toLocaleString("vi-VN"),
-          change: stats.newJobs.change,
+          title: "VIỆC LÀM MỚI (THÁNG NÀY)",
+          value: String(stats.newJobs.value), 
+          change: stats.newJobs.change, 
           changeColor: "success.main",
           icon: faBriefcase,
           iconBgColor: "warning.main",
         },
       ]
-    : []; // Mảng rỗng nếu 'stats' chưa có
+    : [];
 
   // --- Render Trạng thái Loading ---
   if (loading) {

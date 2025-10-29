@@ -13,8 +13,9 @@ import {
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { LoginRequest } from "../model/auth_model";
-import { login } from "../service/auth_service";
+import { loginService } from "../service/auth_service";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../hook/useAuth";
 
 const Login = () => {
   const gradientConfig: NeatConfig = {
@@ -73,6 +74,7 @@ const Login = () => {
     password: "",
   });
 
+  const { login } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDisable, setIsDisable] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
@@ -99,13 +101,10 @@ const Login = () => {
     setError(null);
 
     try {
-      const loginData = await login(loginValue);
+      const loginData = await loginService(loginValue);
       console.log("Đăng nhập thành công:", loginData);
 
-      //Lưu token
-      sessionStorage.setItem("accessToken", loginData.accessToken);
-      localStorage.setItem("userRole", loginData.user.role);
-      localStorage.setItem("userId", loginData.user.id.toString());
+     login(loginData)
 
       navigate("/")
     } catch (err: any) {
@@ -127,9 +126,6 @@ const Login = () => {
     }
   }, []);
 
-  if (loading) {
-    <CircularProgress></CircularProgress>;
-  }
   return (
     <Box
       sx={{
@@ -242,6 +238,7 @@ const Login = () => {
             onClick={handleSubmit}
             fullWidth
             disabled={isDisable}
+            loading={loading}
             sx={{
               borderRadius: 20,
               textTransform: "none",
