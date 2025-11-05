@@ -10,6 +10,7 @@ import CompanyPage from "../pages/company_page";
 import JobPage from "../pages/job_page";
 import UserEdit from "../pages/edit_user";
 import CompanyEdit from "../pages/edit_company";
+import JobEdit from "../pages/edit_job";
 
 type Props = {};
 
@@ -30,6 +31,7 @@ const AppRoute = (props: Props) => {
               <Route path="/jobs" element={<JobPage />} />
               <Route path="/editUser/:id" element={<UserEdit />} />
               <Route path="/editCompany/:id" element={<CompanyEdit />} />
+              <Route path="/editJobs/:id" element={<JobEdit />} />
             </Route>
           </Route>
         ) : (
