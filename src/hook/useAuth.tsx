@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAccessToken(data.accessToken);
     setUser(data.user);
     localStorage.setItem("refreshToken", data.refreshToken);
+
+     setupAxiosInterceptors(() => data.accessToken, logout, refreshToken, login);
   };
 
   const logout = async () => {

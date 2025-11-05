@@ -13,11 +13,7 @@ import {
 import logo from "../img/logo.png";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFolder,
-  faTv,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFolder, faTv, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 
 type Props = {};
@@ -28,14 +24,19 @@ const Sidebar = (props: Props) => {
   const navItems = [
     { text: "Overview", icon: <FontAwesomeIcon icon={faTv} />, path: "/" },
     {
-      text: "Khách hàng",
+      text: "Users",
       icon: <FontAwesomeIcon icon={faUsers} />,
       path: "/users",
     },
     {
       text: "Jobs",
       icon: <FontAwesomeIcon icon={faFolder} />,
-      path: "/job",
+      path: "/jobs",
+    },
+    {
+      text: "Company",
+      icon: <FontAwesomeIcon icon={faFolder} />,
+      path: "/companies",
     },
   ];
 
@@ -51,11 +52,10 @@ const Sidebar = (props: Props) => {
       sx={{
         position: "fixed",
         margin: "1rem 0 1rem 1.5rem",
-        backgroundColor: "#fffffff8",
+        backgroundColor: "#fff7f7",
         borderRadius: "1rem",
         zIndex: "990",
         height: "90%",
-        boxShadow: "0 0 5px 5x #ffffff6e"
       }}
     >
       <Box sx={{ padding: "10px", width: "256px" }}>

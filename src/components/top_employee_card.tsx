@@ -1,5 +1,5 @@
 import { Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { TopEmployer } from "../model/model";
+import { TopEmployer } from "../model/dashboard_model";
 
 
 interface TopEmployersCardProps {

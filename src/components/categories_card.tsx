@@ -1,5 +1,5 @@
 import { faChevronRight, faFileLines, faHeadset, faQuestionCircle, faStar, faTriangleExclamation, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { ModerationCategory } from "../model/model";
+import { ModerationCategory } from "../model/dashboard_model";
 import { Avatar, Card, CardContent, Divider, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

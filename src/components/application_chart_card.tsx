@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Paper, Typography } from "@mui/material";
-import { ApplicationChartDatapoint } from "../model/model";
+import { ApplicationChartDatapoint } from "../model/dashboard_model";
 import {
   CartesianGrid,
   Line,

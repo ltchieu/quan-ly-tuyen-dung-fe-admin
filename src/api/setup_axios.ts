@@ -1,10 +1,20 @@
 import { axiosClient } from "./axios_client";
 
-export const setupAxiosInterceptors = (getAccessToken: () => string | null, logout: () => void, refreshTokenFn: (refreshToken: string) => Promise<any>, login: (data: any) => void) => {
+export const setupAxiosInterceptors = (
+  getAccessToken: () => string | null,
+  logout: () => void,
+  refreshTokenFn: (refreshToken: string) => Promise<any>,
+  login: (data: any) => void
+) => {
   axiosClient.interceptors.request.use(
     (config) => {
       const token = getAccessToken();
-      if (token) {
+      if (
+        token &&
+        !config.url?.includes("/auth/login") &&
+        !config.url?.includes("/auth/refresh") &&
+        !config.url?.includes("/auth/logout")
+      ) {
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;

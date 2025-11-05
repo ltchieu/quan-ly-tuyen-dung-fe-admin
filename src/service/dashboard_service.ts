@@ -4,7 +4,7 @@ import {
   DashboardStats,
   ModerationCategoriesResponse,
   TopEmployersResponse,
-} from "../model/model";
+} from "../model/dashboard_model";
 
 export const dashboardService = {
   getDashboardStats: async (): Promise<DashboardStats> => {

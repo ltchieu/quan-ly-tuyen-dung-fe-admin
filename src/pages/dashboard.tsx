@@ -21,7 +21,7 @@ import {
   DashboardStats,
   ModerationCategory,
   TopEmployer,
-} from "../model/model";
+} from "../model/dashboard_model";
 import { dashboardService } from "../service/dashboard_service";
 import CategoriesCard from "../components/categories_card";
 import TopEmployersCard from "../components/top_employee_card";
