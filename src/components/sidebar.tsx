@@ -13,7 +13,7 @@ import {
 import logo from "../img/logo.png";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolder, faTv, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faFile, faFolder, faTv, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 
 type Props = {};
@@ -37,6 +37,11 @@ const Sidebar = (props: Props) => {
       text: "Company",
       icon: <FontAwesomeIcon icon={faFolder} />,
       path: "/companies",
+    },
+    {
+      text: "Upload",
+      icon: <FontAwesomeIcon icon={faFile} />,
+      path: "/upload",
     },
   ];
 

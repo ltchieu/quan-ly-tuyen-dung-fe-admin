@@ -88,11 +88,7 @@ const JobPage: React.FC = () => {
   const handlePublish = async (id: string) => {
     try {
       await jobService.publishJob(id);
-      setJobs((prevJobs) =>
-      prevJobs.map((job) =>
-        job.id === id ? { ...job, status: 'published' } : job
-      )
-    );
+      fetchJobs();
     } catch (err: any) {
       setError(err.message);
     }
@@ -101,11 +97,7 @@ const JobPage: React.FC = () => {
   const handleUnpublish = async (id: string) => {
     try {
       await jobService.unpublishJob(id);
-      setJobs((prevJobs) =>
-        prevJobs.map((job) =>
-          job.id === id ? { ...job, status: "draft" } : job
-        )
-      );
+      fetchJobs();
     } catch (err: any) {
       setError(err.message);
     }
@@ -113,9 +105,7 @@ const JobPage: React.FC = () => {
 
   return (
     <Box sx={{ m: 4 }}>
-      <Box
-        mb={2}
-      >
+      <Box mb={2}>
         <Typography variant="h4" gutterBottom fontWeight="bold">
           Quản lý Công việc
         </Typography>
