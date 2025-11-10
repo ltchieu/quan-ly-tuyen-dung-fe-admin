@@ -136,8 +136,17 @@ const CompanyPage: React.FC = () => {
         rejectionReason: dialog.isApprove ? "" : rejectionReason,
       });
       closeVerifyDialog();
-      setPage(1);
-      setActiveTab("pending");
+      setData((prevData) =>
+        prevData.filter((item) => item.id !== dialog.companyId)
+      );
+
+      companyService
+        .getPendingCompanies(page, pageSize)
+        .then((response) => {
+          setData(response.items);
+          setTotalPages(response.totalPages);
+        })
+        .catch((err) => console.error("Lỗi đồng bộ lại danh sách:", err));
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -154,8 +163,17 @@ const CompanyPage: React.FC = () => {
       setLoading(true);
       try {
         await companyService.deleteCompany(id);
-        setPage(1);
-        setActiveTab("all");
+        setData((prevData) =>
+          prevData.filter((item) => item.id !== dialog.companyId)
+        );
+
+        companyService
+          .getPendingCompanies(page, pageSize)
+          .then((response) => {
+            setData(response.items);
+            setTotalPages(response.totalPages);
+          })
+          .catch((err) => console.error("Lỗi đồng bộ lại danh sách:", err));
       } catch (err: any) {
         setError(err.message);
       } finally {
